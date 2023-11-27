@@ -30,7 +30,7 @@ def cd_dir_and_pos2nnlist(poscar_folder_path):
     os.chdir(poscar_folder_path)
     # 2. make folder for POSCAR.nnlist
     poscar_nnlist_folder_p = poscar_folder_path + '/nnlist_' + inputted_distance
-    os.makedirs(poscar_nnlist_folder_p)
+    None if os.path.exists(poscar_nnlist_folder_p) else os.makedirs(poscar_nnlist_folder_p)
     # 3. Run poscar2nnlist
     with open(poscar_nnlist_folder_p + '/poscar2nnlist_log.txt', mode='w') as f:
         cp = subprocess.run([poscar2nnlist_abs_path, 'POSCAR', inputted_distance],
@@ -39,7 +39,10 @@ def cd_dir_and_pos2nnlist(poscar_folder_path):
         print(cp.stdout, file=f)
     # 4. move POSCAR.nnlist from cwd to sub-cwd(: current working directory)
     poscar_nnlist_p = poscar_folder_path + '/POSCAR.nnlist'
-    shutil.move(poscar_nnlist_p, poscar_nnlist_folder_p)
+    try:
+        shutil.move(poscar_nnlist_p, poscar_nnlist_folder_p)
+    except shutil.Error:
+        pass
 
 
 # make POSCAR.nnlist by using cd_dir_and_pos2nnlist() and POSCAR files
@@ -47,7 +50,7 @@ before = time.time()
 try:
     p = Pool(cpu_count() - 1)
     print("Now poscar2nnlist is making POSCAR.nnlist from POSCAR!!!")
-    list(tqdm(p.imap(cd_dir_and_pos2nnlist, poscar_folder_path_list[0:3]), total=len(poscar_folder_path_list)))
+    list(tqdm(p.imap(cd_dir_and_pos2nnlist, poscar_folder_path_list), total=len(poscar_folder_path_list)))
 finally:
     p.close()
     p.join()
