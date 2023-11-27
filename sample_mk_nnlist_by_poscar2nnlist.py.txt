@@ -1,0 +1,5 @@
+how to use this commnad：
+python3 mk_nnlist_by_poscar2nnlist.py <nnlistを作成したいPOSCARファイルの親フォルダリスト（.npy）のパス>
+
+example:
+python3 mk_nnlist_by_poscar2nnlist.py ./scripts_get_C_O_existed_poscar_abs_path_list/C_O_existed_poscar_folder_path_list.npy
