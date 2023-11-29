@@ -25,10 +25,18 @@ poscar2nnlist_abs_path = cwd + '/neib_code/poscar2nnlist'
 inputted_distance = input("Input a number which is poscar2nnlist's second arg. :nearest neighbors distance(Å) you want to catch: ")
 
 
+def check_folder_exist(poscar_folder_path):
+    poscar_nnlist_folder_p = poscar_folder_path + '/nnlist_' + inputted_distance
+    if os.path.exists(poscar_nnlist_folder_p):
+        print(f"folder which name you inputted on command line, {inputted_distance}, was already existed.")
+        print("So quit running this script.")
+        sys.exit()
+
+
 def cd_dir_and_pos2nnlist(poscar_folder_path):
     # 1. Change current dir to dir that exists a POSCAR file
     os.chdir(poscar_folder_path)
-    # 2. make folder for POSCAR.nnlist
+    # 2. If folder doesnot exist, make folder for POSCAR.nnlist
     poscar_nnlist_folder_p = poscar_folder_path + '/nnlist_' + inputted_distance
     None if os.path.exists(poscar_nnlist_folder_p) else os.makedirs(poscar_nnlist_folder_p)
     # 3. Run poscar2nnlist
@@ -44,6 +52,9 @@ def cd_dir_and_pos2nnlist(poscar_folder_path):
     except shutil.Error:
         pass
 
+
+# If poscar folder exists, quit running this script.
+check_folder_exist(poscar_folder_path_list[0])
 
 # make POSCAR.nnlist by using cd_dir_and_pos2nnlist() and POSCAR files
 before = time.time()
