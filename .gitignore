@@ -1,0 +1,9 @@
+#ignore .ipynb_checkpoints/
+.ipynb_checkpoints/
+
+#ignore old/
+old/
+
+#ignore .ipynb
+*.ipynb
+
